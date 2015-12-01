@@ -1,2 +1,2 @@
 # sandpiles
-Simulations of sandpiles and tropical curves.
+Simulations of tropical sandpiles and tropical curves.
