@@ -2,7 +2,7 @@
 // Name        : sandpile1.cpp
 // Author      : Aldo Guzmán-Sáenz
 // Version     :
-// Copyright   : 
+// Copyright   :
 // Description : This program simulates an abelian sandpile's evolution.
 //============================================================================
 
@@ -64,12 +64,11 @@ void relax()				// Main relaxation function (uses two stacks to keep track of un
 		while(!unstable1.empty())
 		{
 			current=unstable1.top();
-			unstable1.pop();
-			if (grid[ih(current)] >= CRITICAL)
+			while (grid[ih(current)] >= CRITICAL)
 			{
 				grid[ih(current)] -= CRITICAL;
 				neighbors = adjacent(current);
-				for(i=0;i<neighbors.size();i++)
+				for(i=0;i<neighbors.size();++i)
 					if (issink(neighbors[i])==false)
 					{
 						grid[ih(neighbors[i])]+=1;
@@ -77,16 +76,16 @@ void relax()				// Main relaxation function (uses two stacks to keep track of un
 							unstable2.push(neighbors[i]);
 					}
 			}
+			unstable1.pop();
 		}
 		while(!unstable2.empty())
 		{
 			current=unstable2.top();
-			unstable2.pop();
-			if (grid[ih(current)] >= CRITICAL)
+			while (grid[ih(current)] >= CRITICAL)
 			{
 				grid[ih(current)] -= CRITICAL;
 				neighbors = adjacent(current);
-				for(i=0;i<neighbors.size();i++)
+				for(i=0;i<neighbors.size();++i)
 					if (issink(neighbors[i])==false)
 					{
 						grid[ih(neighbors[i])]+=1;
@@ -94,6 +93,7 @@ void relax()				// Main relaxation function (uses two stacks to keep track of un
 							unstable1.push(neighbors[i]);
 					}
 			}
+			unstable2.pop();
 		}
 	}
 }
@@ -107,18 +107,18 @@ void relax()				// Main relaxation function (uses two stacks to keep track of un
 int main(int argc, char **argv) {
 	string path("./grid.dat");
 	ofstream output(path.c_str(), ios::out | ofstream::binary);
-	n=1000;											// Default grid size
+	n=100;											// Default grid size
 	//n=atoi(argv[1]);								// Read grid size from command line if available
-	int nunstable=10;
+	int nunstable=150;
 	grid.resize(n*n,3);								// Fill our grid with 3's
-	srand(1);
+	srand(2);
 	initialunstable.resize(nunstable);
-	for(unsigned int i=0; i< initialunstable.size();i++)
+	for(unsigned int i=0; i< initialunstable.size();++i)
 	{
 		initialunstable[i].first=rand()%n;
 		initialunstable[i].second=rand()%n;
 	}
-	for(unsigned int i=0; i< initialunstable.size();i++)
+	for(unsigned int i=0; i< initialunstable.size();++i)
 	{
 		grid[ih(initialunstable[i])]=4;
 		unstable1.push(initialunstable[i]);
@@ -126,11 +126,11 @@ int main(int argc, char **argv) {
 	relax();
 	output.write(reinterpret_cast<const char *>(&n), sizeof(n));
 	output.write(reinterpret_cast<const char *>(&nunstable), sizeof(nunstable));
-	for (unsigned int i=0;i<grid.size();i++)
+	for (unsigned int i=0;i<grid.size();++i)
 	{
 		output.write(reinterpret_cast<const char *>(&grid[i]),sizeof(grid[i]));
 	}
-	for (unsigned int i=0;i<initialunstable.size();i++)
+	for (unsigned int i=0;i<initialunstable.size();++i)
 	{
 		output.write(reinterpret_cast<const char *>(&initialunstable[i].first),sizeof(initialunstable[i].first));
 		output.write(reinterpret_cast<const char *>(&initialunstable[i].second),sizeof(initialunstable[i].second));
