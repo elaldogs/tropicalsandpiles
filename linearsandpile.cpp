@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <fstream>
 #include <map>
+#include <exception>
 
 using namespace std;
 
@@ -181,12 +182,29 @@ void operatorgp(const pair<int, int>& cell, const pair<int, int>& monomial)
                         monomial.second * cell.second;
 }
 
-void init()
+void init(int argc, char **argv)
 {
-    n = 1000;								// Default grid size
-    m = n;									// By default, the grid is square
+    if (argc > 1)
+    {
+        if (argc == 4)
+        {
+            m = atoi(argv[1]);
+            n = atoi(argv[2]);
+            nunstable = atoi(argv[3]);
+        }
+        else
+        {
+            cout << "Fatal error. Check number of parameters.";
+            exit(-1);
+        }
+    }
+    else
+    {
+        n = 100;								// Default grid size
+        m = n;									// By default, the grid is square
+        nunstable = 250;
+    }
     //n=atoi(argv[1]);						// Read grid size from command line if available
-    nunstable = 200;
     srand(2);
     int temp2;
     vector<int> temp3;
@@ -236,7 +254,7 @@ void pseudorelax()                          //Analogue of the relaxation functio
 }
 
 //============================================================================
-// TODO: Implement parameter parsing
+// TODO: Implement parameter parsing with custom names
 // Parameters:
 // --size N 			size of the grid
 // --numberofgrains		number of initial unstable cells (at random positions)
@@ -248,7 +266,7 @@ int main(int argc, char **argv)
     int monomialcount;
     string path("./grid.dat");
     ofstream output(path.c_str(), ios::out | ofstream::binary);
-    init();
+    init(argc,argv);
     pseudorelax();
     output.write(reinterpret_cast<const char *>(&n), sizeof(n));
     output.write(reinterpret_cast<const char *>(&nunstable), sizeof(nunstable));
