@@ -186,11 +186,12 @@ void init(int argc, char **argv)
 {
     if (argc > 1)
     {
-        if (argc == 4)
+        if (argc == 5)
         {
             m = atoi(argv[1]);
             n = atoi(argv[2]);
             nunstable = atoi(argv[3]);
+            srand(atoi(argv[4]));
         }
         else
         {
@@ -203,9 +204,9 @@ void init(int argc, char **argv)
         n = 100;								// Default grid size
         m = n;									// By default, the grid is square
         nunstable = 250;
+        srand(2);
     }
     //n=atoi(argv[1]);						// Read grid size from command line if available
-    srand(2);
     int temp2;
     vector<int> temp3;
     upper = make_pair(0, 1);
