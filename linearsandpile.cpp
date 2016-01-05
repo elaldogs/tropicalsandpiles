@@ -14,6 +14,7 @@
 #include <fstream>
 #include <map>
 #include <exception>
+#include <random>
 
 using namespace std;
 
@@ -26,7 +27,8 @@ vector<pair<int, int> > initialunstable;		// Vector used to store the initial un
 int m, n;										// Sizes of the grid, m = # of rows; n = # of columns
 pair<int, int> upper, lower, dexter, sinister;	// Current extreme monomials in each direction of the grid (dexter=right, sinister=left in latin)
 int nunstable;									// Number of initial "unstable" cells in the grid
-
+mt19937 mt;
+uniform_int_distribution<int> dist2, dist1;
 //=============================================================================
 
 pair<int, int> operator+(						// Function to add pairs using the operator +
@@ -191,7 +193,11 @@ void init(int argc, char **argv)
             m = atoi(argv[1]);
             n = atoi(argv[2]);
             nunstable = atoi(argv[3]);
-            srand(atoi(argv[4]));
+            mt19937 tempmt(atoi(argv[4]));
+            uniform_int_distribution<int> tempdist2(1,m-2), tempdist1(1,n-2);
+            mt=tempmt;
+            dist1=tempdist1;
+            dist2=tempdist2;
         }
         else
         {
@@ -204,7 +210,11 @@ void init(int argc, char **argv)
         n = 100;								// Default grid size
         m = n;									// By default, the grid is square
         nunstable = 250;
-        srand(2);
+        mt19937 tempmt(2);
+        uniform_int_distribution<int> tempdist2(1,m-2), tempdist1(1,n-2);
+        mt=tempmt;
+        dist1=tempdist1;
+        dist2=tempdist2;
     }
     //n=atoi(argv[1]);						// Read grid size from command line if available
     int temp2;
@@ -220,8 +230,8 @@ void init(int argc, char **argv)
     initialunstable.resize(nunstable);
     for (unsigned int i = 0; i < initialunstable.size(); ++i)
     {
-        initialunstable[i].first = rand() % (n-4)+2;
-        initialunstable[i].second = rand() % (m-4)+2;
+        initialunstable[i].first = dist1(mt);
+        initialunstable[i].second = dist2(mt);
     }
     for (map<pair<int, int>, int>::iterator i = current.begin();
             i != current.end(); ++i)
