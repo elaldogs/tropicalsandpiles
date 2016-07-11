@@ -22,6 +22,7 @@ using namespace std;
 
 #define CRITICAL 4								// Value at which points become unstable
 
+int operationscount;
 map<pair<int, int>, int> current; 				// Map (dictionary) used to store the current (active) monomials as pairs and coefficients
 vector<pair<int, int> > initialunstable;		// Vector used to store the initial unstable cells in the grid
 int m, n;										// Sizes of the grid, m = # of rows; n = # of columns
@@ -209,7 +210,7 @@ void init(int argc, char **argv)
     {
         n = 100;								// Default grid size
         m = n;									// By default, the grid is square
-        nunstable = 250;
+        nunstable = 150;
         mt19937 tempmt(2);
         uniform_int_distribution<int> tempdist2(1,m-2), tempdist1(1,n-2);
         mt=tempmt;
@@ -278,6 +279,7 @@ int main(int argc, char **argv)
     string path("./grid.dat");
     ofstream output(path.c_str(), ios::out | ofstream::binary);
     init(argc,argv);
+    operationscount=0;
     pseudorelax();
     output.write(reinterpret_cast<const char *>(&n), sizeof(n));
     output.write(reinterpret_cast<const char *>(&nunstable), sizeof(nunstable));
@@ -305,5 +307,7 @@ int main(int argc, char **argv)
         output.write(reinterpret_cast<const char *>(&initialunstable[i].second),
                      sizeof(initialunstable[i].second));
     }
+    output.close();
+
     return 0;
 }
