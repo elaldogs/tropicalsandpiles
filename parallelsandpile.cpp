@@ -787,7 +787,7 @@ int main(int argc, char **argv) {
         debug_messages(6,debugging);
         if (world_rank==0)
         {
-            int mypendingcount=nonzerocount(s.outerbottom)
+			int mypendingcount=nonzerocount(s.outerbottom)
                             +nonzerocount(s.outertop)
                             +nonzerocount(s.outerleft)
                             +nonzerocount(s.outerright);
@@ -803,10 +803,10 @@ int main(int argc, char **argv) {
                 accum += pendingcount;
             }
             debug_messages(8,debugging);
-            addoutersinmaster(s);
-            debug_messages(9,debugging);
             receiveallouters();
             debug_messages(10,debugging);
+            addoutersinmaster(s);
+            debug_messages(9,debugging);
             sendallouterstoadd();
             debug_messages(11,debugging);
             for (int i=1;i<partsx*partsy;++i)
