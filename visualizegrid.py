@@ -29,7 +29,7 @@ def draw():
             if grid[i][j]>3:
                 canvas.create_rectangle(delta*i, delta*j, delta*(i+1), delta*(j+1), fill="black")
     for [i,j] in unstable:
-        canvas.create_oval(delta*i+10,delta*j+10,delta*i-8,delta*j-8,fill="blue")
+        canvas.create_oval(delta*i,delta*j,delta*(i+1),delta*(j+1),fill="blue")
     canvas.update_idletasks()       
     
 root = Tk()
