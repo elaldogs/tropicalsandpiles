@@ -15,15 +15,15 @@ nunstable=1
 delta=1
 monomials=[]
 unstable=[]
-radiusx=2
-radiusy=1
+radiusx=delta
+radiusy=delta
 
 def draw():
     canvas.delete(ALL)
     for [i,j] in monomials:
         canvas.create_rectangle(delta*i, delta*j, delta*(i+1), delta*(j+1), fill="green")
     for [i,j] in unstable:
-        canvas.create_oval(delta*i+radiusx,delta*j+radiusx,delta*i-radiusy,delta*j-radiusy,fill="blue")
+        canvas.create_oval(delta*i,delta*j,delta*(i+1),delta*(j+1),fill="blue")
     canvas.update_idletasks()       
     
 root = Tk()
@@ -50,6 +50,8 @@ if __name__ == "__main__":
         unstable = [ [unpack("i",input.read(4))[0],unpack("i",input.read(4))[0]] for i in xrange(nunstable)]
     delta=max([1,800/n])
     canvas.config(width=delta*n, height=delta*n)
+    radiusx=delta
+    radiusy=delta
     draw()
     root.mainloop()
     
