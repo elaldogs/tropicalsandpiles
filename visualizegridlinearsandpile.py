@@ -15,13 +15,15 @@ nunstable=1
 delta=1
 monomials=[]
 unstable=[]
+radiusx=2
+radiusy=1
 
 def draw():
     canvas.delete(ALL)
     for [i,j] in monomials:
         canvas.create_rectangle(delta*i, delta*j, delta*(i+1), delta*(j+1), fill="green")
     for [i,j] in unstable:
-        canvas.create_oval(delta*i+10,delta*j+10,delta*i-8,delta*j-8,fill="blue")
+        canvas.create_oval(delta*i+radiusx,delta*j+radiusx,delta*i-radiusy,delta*j-radiusy,fill="blue")
     canvas.update_idletasks()       
     
 root = Tk()
@@ -40,7 +42,7 @@ frame.pack(fill=BOTH,expand=0)
 
 #this assumes that the integer size is 4 bytes
 if __name__ == "__main__":
-    with  open("./grid.dat") as input:
+    with  open("./grid.dat","rb") as input:
         n = unpack("i",input.read(4))[0]
         nunstable = unpack("i",input.read(4))[0]
         nmonomials = unpack("i",input.read(4))[0]

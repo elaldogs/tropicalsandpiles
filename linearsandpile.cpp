@@ -30,6 +30,9 @@ pair<int, int> upper, lower, dexter, sinister;	// Current extreme monomials in e
 int nunstable;									// Number of initial "unstable" cells in the grid
 mt19937 mt;
 uniform_int_distribution<int> dist2, dist1;
+vector<pair<int, int> > outputmonomials;
+int monomialcount;
+vector<pair<int, int> > psequence;
 //=============================================================================
 
 pair<int, int> operator+(						// Function to add pairs using the operator +
@@ -259,39 +262,20 @@ void pseudorelax()                          //Analogue of the relaxation functio
             if (monomial.size() == 1)
             {
                 operatorgp(initialunstable[i], monomial[0]);
+                psequence.push_back(initialunstable[i]);
                 flag = true;
             }
         }
     }
 }
 
-//============================================================================
-// TODO: Implement parameter parsing with custom names
-// Parameters:
-// --size N 			size of the grid
-// --numberofgrains		number of initial unstable cells (at random positions)
-//============================================================================
-int main(int argc, char **argv)
+void writeout()
 {
-    vector<pair<int, int> > temp1;
-    vector<pair<int, int> > outputmonomials;
-    int monomialcount;
+    // Output of final state of the grid
     string path("./grid.dat");
     ofstream output(path.c_str(), ios::out | ofstream::binary);
-    init(argc,argv);
-    operationscount=0;
-    pseudorelax();
     output.write(reinterpret_cast<const char *>(&n), sizeof(n));
     output.write(reinterpret_cast<const char *>(&nunstable), sizeof(nunstable));
-    for (int i = 0; i < n * m; ++i)
-    {
-        temp1 = minimalmonomials(ih(i));
-        if (temp1.size() > 1)
-        {
-            outputmonomials.push_back(ih(i));
-        }
-    }
-    monomialcount = outputmonomials.size();
     output.write(reinterpret_cast<const char *>(&monomialcount),
                  sizeof(monomialcount));
     for (vector<pair<int, int> >::iterator i = outputmonomials.begin(); i != outputmonomials.end();
@@ -308,6 +292,53 @@ int main(int argc, char **argv)
                      sizeof(initialunstable[i].second));
     }
     output.close();
+    // Output of sequence of operators Gp
+    path = "./psequence.dat";
+    int pseqlen = psequence.size();
+    output.open(path.c_str(), ios::out | ofstream::binary);
+    output.write(reinterpret_cast<const char *>(&pseqlen), sizeof(pseqlen));
+    for (vector<pair<int, int> >::iterator i = psequence.begin(); i != psequence.end();
+            ++i)
+    {
+        output.write(reinterpret_cast<const char *>(&(i->first)),sizeof(i->first));
+        output.write(reinterpret_cast<const char *>(&(i->second)),sizeof(i->second));
+    }
+    output.close();
+    // Output of map (i,j)->a_{i,j}
+    path = "./active.dat";
+    int actlen = current.size();
+    output.open(path.c_str(), ios::out | ofstream::binary);
+    output.write(reinterpret_cast<const char *>(&actlen), sizeof(actlen));
+    for (auto i = current.begin(); i != current.end(); ++i)
+    {
+        output.write(reinterpret_cast<const char *>(&(i->first.first)),sizeof(i->first.first));
+        output.write(reinterpret_cast<const char *>(&(i->first.second)),sizeof(i->first.second));
+        output.write(reinterpret_cast<const char *>(&(i->second)),sizeof(i->second));
+    }
+    output.close();
+}
+//============================================================================
+// TODO: Implement parameter parsing with custom names
+// Parameters:
+// --size N 			size of the grid
+// --numberofgrains		number of initial unstable cells (at random positions)
+//============================================================================
+int main(int argc, char **argv)
+{
+    vector<pair<int, int> > temp1;
 
+    init(argc,argv);
+    operationscount=0;
+    pseudorelax();
+    for (int i = 0; i < n * m; ++i)
+    {
+        temp1 = minimalmonomials(ih(i));
+        if (temp1.size() > 1)
+        {
+            outputmonomials.push_back(ih(i));
+        }
+    }
+    monomialcount = outputmonomials.size();
+    writeout();
     return 0;
 }
