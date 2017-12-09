@@ -83,8 +83,8 @@ if __name__ == "__main__":
     #number of grains dropped
     k=1000000
     random.seed(1)
-    f1 = open('classical_sandpile/'+str(backphone)+'avalanchesfinal'+str(n)+' '+str(k)+'.txt', 'w')
-    f2 = open('classical_sandpile/'+str(backphone)+'volumeavalanchesfinal'+str(n)+' '+str(k)+'.txt', 'w')
+    f1 = open('classical_sandpile/'+str(backphone)+'avalanches'+str(n)+' '+str(k)+'.txt', 'w')
+    f2 = open('classical_sandpile/'+str(backphone)+'volumeavalanches'+str(n)+' '+str(k)+'.txt', 'w')
     f1.write('side='+str(n)+' '+'number of points ='+ str(k)+'sizes of avalanches: ')
     f2.write('side='+str(n)+' '+'number of points ='+ str(k)+'volumes of avalanches: ')
     
