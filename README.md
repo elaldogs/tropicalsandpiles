@@ -4,7 +4,8 @@ In the paper we propose a new Mathematical tool to study self-organized critical
 
 # Tropical Sandpiles
 Simulations of tropical sandpiles and tropical curves.
- - parallelsandpile outputs a file called grid.dat which contains a representation of the final state of the sandpile. It requires MPI to be compiled and run it.
+ - parallelsandpile outputs a file called grid.dat which contains a representation of the final state of the sandpile. 
+ It requires MPI to be compiled and to run it.
  - visualizegrid reads grid.dat and displays the final state of the sandpile.
 
 
@@ -14,15 +15,15 @@ g++ -std=c++11 -O3 linearsandpile.cpp -o linearsandpile
 - and run (with default parameters):
 ./linearsandpile
 - this will produce a bunch of files in the folder tsandpile/
-- file power1000_900_2.txt contains the avalanche sizes, with the sign '-' if the corresponding avalanche touched the boundary
+- files power1000_900_2.txt contains the avalanche sizes, with the sign '-' if the corresponding avalanche touched the boundary
 - To visualize the corresponding tropical curve type:
 python vizualiselinearsand.py
 - this will show you a picture of the tropical curve, with blue points indicating the positions of initial unstable points.
 
 
 To see power law:
-in the power1000_100000_n.txt file the data for avalanches (n is the seed = 82,83,84,85,86,88,89,90)
-which gives 0.8 critical exponent
+in the tsandpile/power1000_100000_n.txt files the data for avalanches is stored (n is the seed = 82,83,84,85,86,88,89,90)
+which gives 0.9 as the critical exponent
 size = 1000, 100000 stands for the total number of experiments.
 In the file we have a bit more than 10000 of them performed (for each seed).
 
